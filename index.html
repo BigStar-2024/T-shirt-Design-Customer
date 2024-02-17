@@ -80,14 +80,14 @@
     <script>
         window.onload = function () {
             loadSampleImage();
+            fetch('https://96f8-57-180-23-178.ngrok-free.app/get-url')
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('urlDisplay').innerText = `Received URL: ${data.url}`;
+                })
+                .catch(error => console.error('Error retrieving URL:', error));
         };
 
-        fetch('https://96f8-57-180-23-178.ngrok-free.app/get-url')
-            .then(response => response.json())
-            .then(data => {
-                document.getElementById('urlDisplay').innerText = `Received URL: ${data.url}`;
-            })
-            .catch(error => console.error('Error retrieving URL:', error));
 
         function allowDrop(event) {
             event.preventDefault();
