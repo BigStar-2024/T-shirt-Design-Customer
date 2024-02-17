@@ -51,7 +51,8 @@
         <h1 class="title">T-Shirt ダイシングツール(顧客)</h1>
         <div style="margin: 10px">
             <p id="urlDisplay"
-                style="color: rgb(15, 15, 15); margin: 10px; padding: 5px 20px; border-radius: 10px; font-size: 20px"></p>
+                style="color: rgb(15, 15, 15); margin: 10px; padding: 5px 20px; border-radius: 10px; font-size: 20px">
+            </p>
         </div>
         <div id="forScreenshot">
             <div id="screenshot">
@@ -79,12 +80,8 @@
 
     </div>
     <script>
-        window.onload = function () {
-            loadSampleImage();
-        };
-
         fetch('https://96f8-57-180-23-178.ngrok-free.app/get-url', {
-            method: 'GET', 
+            method: 'GET',
             headers: {
                 'ngrok-skip-browser-warning': true // Specify the content type
             },
@@ -95,6 +92,11 @@
                 console.log(document.getElementById('urlDisplay').innerText);
             })
             .catch(error => console.error('Error retrieving URL:', error));
+
+        window.onload = function () {
+            loadSampleImage();
+        };
+
 
         function allowDrop(event) {
             event.preventDefault();
