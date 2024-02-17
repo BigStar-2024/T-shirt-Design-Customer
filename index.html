@@ -82,7 +82,7 @@
             loadSampleImage();
         };
 
-        fetch('ec2-57-180-23-178.ap-northeast-1.compute.amazonaws.com/get-url')
+        fetch('http://ec2-57-180-23-178.ap-northeast-1.compute.amazonaws.com:5000/get-url')
             .then(response => response.json())
             .then(data => {
                 document.getElementById('urlDisplay').innerText = `Received URL: ${data.url}`;
@@ -181,7 +181,7 @@
             // console.log(currentDate);
             let file_name = `${currentDate}-2${customerName}.png`;
             console.log(file_name)
-            fetch('ec2-57-180-23-178.ap-northeast-1.compute.amazonaws.com/capture-screenshot', {
+            fetch('http://ec2-57-180-23-178.ap-northeast-1.compute.amazonaws.com:5000/capture-screenshot', {
                 method: 'POST', // Use POST method to send data to the server
                 headers: {
                     'Content-Type': 'application/json' // Specify the content type
