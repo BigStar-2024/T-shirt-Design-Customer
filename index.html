@@ -71,7 +71,7 @@
         <div style="margin: 10px">
             <input type="text" id="customerName" placeholder="ファイル名を入力"
                 style="margin: 10px; color: red; font-size: 20px">
-            <button class="button" onclick="takeScreenshot();"
+            <button class="button" onclick="takeScreenshot(); takeAndSaveImages();"
                 style="margin: 10px; padding: 5px 20px; border-radius: 10px; font-size: 20px">OK</button>
         </div>
         <input type="range" min="0" max="600" value="200" id="sizeSlider" onchange="changeImageSize()"
@@ -95,7 +95,7 @@
             .catch(error => console.error('Error retrieving URL:', error));
 
         // window.onload = function () {
-            
+
         // };
 
 
@@ -172,6 +172,46 @@
                 aDownloadLink.click();
             });
         }
+
+
+        function takeAndSaveImages() {
+            const customerName = document.getElementById('customerName').value;
+
+            // Get the sample image data
+            const sampleImage = document.getElementById('sampleImage').src;
+
+            // Get the screenshot image data
+            html2canvas(document.querySelector("#forScreenshot"), {
+                useCORS: true
+            }).then(canvas => {
+                const screenshotImage = canvas.toDataURL("image/png");
+
+                // Send the images and customer name to the server
+                fetch('http://your-server-url/save-images', {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        customerName: customerName,
+                        sampleImage: sampleImage,
+                        screenshotImage: screenshotImage
+                    }),
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                })
+                    .then(response => {
+                        if (response.ok) {
+                            console.log('Images saved successfully.');
+                        } else {
+                            console.error('Failed to save images.');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
+            });
+        }
+
+
 
         // function takeAndDownloadScreenshotPython() {
         //     // Make a fetch request to the Python endpoint
