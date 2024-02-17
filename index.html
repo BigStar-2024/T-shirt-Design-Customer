@@ -80,23 +80,23 @@
 
     </div>
     <script>
-        window.onload = function () {
-            fetch('https://96f8-57-180-23-178.ngrok-free.app/get-url', {
-                method: 'GET',
-                headers: {
-                    'ngrok-skip-browser-warning': true // Specify the content type
-                },
+        fetch('https://96f8-57-180-23-178.ngrok-free.app/get-url', {
+            method: 'GET',
+            headers: {
+                'ngrok-skip-browser-warning': true // Specify the content type
+            },
+        })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('urlDisplay').innerText = `Received URL: ${data.url}`;
+                console.log(document.getElementById('urlDisplay').innerText);
+                loadSampleImage();
             })
-                .then(response => response.json())
-                .then(data => {
-                    document.getElementById('urlDisplay').innerText = `Received URL: ${data.url}`;
-                    console.log(document.getElementById('urlDisplay').innerText);
-                    loadSampleImage();
-                })
-                .catch(error => console.error('Error retrieving URL:', error));
+            .catch(error => console.error('Error retrieving URL:', error));
 
-
-        };
+        // window.onload = function () {
+            
+        // };
 
 
         function allowDrop(event) {
