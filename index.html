@@ -50,9 +50,9 @@
     <div class="app" id="app">
         <h1 class="title">T-Shirt ダイシングツール(顧客)</h1>
         <div style="margin: 10px">
-            <p id="urlDisplay"
+            <div id="urlDisplay"
                 style="color: rgb(15, 15, 15); margin: 10px; padding: 5px 20px; border-radius: 10px; font-size: 20px">
-            </p>
+            </div>
         </div>
         <div id="forScreenshot">
             <div id="screenshot">
@@ -244,8 +244,8 @@
             console.log("fjlwejfwo");
             console.log(sampleImageURL);
             const sampleImage = document.getElementById('sampleImage');
-            console.log(sampleImage);
             sampleImage.src = sampleImageURL;
+            console.log(sampleImage);
 
             // Extracting Top, Left, Width, and Height values from the URL
             const regex = /Top:(\d+\.\d+)%\,Left:(\d+\.\d+)%\,Width:(\d+\.\d+)%\,Height:(\d+\.\d+)%/;
