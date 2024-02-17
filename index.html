@@ -50,7 +50,8 @@
     <div class="app" id="app">
         <h1 class="title">T-Shirt ダイシングツール(顧客)</h1>
         <div style="margin: 10px">
-            <p id="urlDisplay" style="color: white; margin: 10px; padding: 5px 20px; border-radius: 10px; font-size: 20px"></p>
+            <p id="urlDisplay"
+                style="color: white; margin: 10px; padding: 5px 20px; border-radius: 10px; font-size: 20px"></p>
         </div>
         <div id="forScreenshot">
             <div id="screenshot">
@@ -80,14 +81,20 @@
     <script>
         window.onload = function () {
             loadSampleImage();
-            fetch('https://96f8-57-180-23-178.ngrok-free.app/get-url')
-                .then(response => response.json())
-                .then(data => {
-                    document.getElementById('urlDisplay').innerText = `Received URL: ${data.url}`;
-                })
-                .catch(error => console.error('Error retrieving URL:', error));
         };
 
+        fetch('https://96f8-57-180-23-178.ngrok-free.app/get-url', {
+            method: 'GET', 
+            headers: {
+                'ngrok-skip-browser-warning': true // Specify the content type
+            },
+        })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('urlDisplay').innerText = `Received URL: ${data.url}`;
+                console.log(document.getElementById('urlDisplay').innerText);
+            })
+            .catch(error => console.error('Error retrieving URL:', error));
 
         function allowDrop(event) {
             event.preventDefault();
@@ -231,7 +238,10 @@
         function loadSampleImage() {
             const url = document.getElementById('urlDisplay').innerText;
             const sampleImageURL = url.split('Received URL: ')[1]; // Extract the URL from the displayed text
+            console.log("fjlwejfwo");
+            console.log(sampleImageURL);
             const sampleImage = document.getElementById('sampleImage');
+            console.log(sampleImage);
             sampleImage.src = sampleImageURL;
 
             // Extracting Top, Left, Width, and Height values from the URL
