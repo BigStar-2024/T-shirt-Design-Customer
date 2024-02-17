@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>T-Shirt Image Upload</title>
+    <style>
+        .app {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        #dropArea {
+            border: 2px dashed #ccc;
+            width: 500px;
+            height: 500px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+
+        #sizeSlider {
+            width: 200px;
+            margin-bottom: 10px;
+        }
+
+        .button {
+            background-color: rgb(77, 73, 73);
+            color: white;
+        }
+
+        .button:hover {
+            background-color: rgb(218, 249, 172);
+            color: brown;
+        }
+
+        .title {
+            color: brown;
+            font-weight: 600;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="app" id="app">
+        <h1 class="title">T-Shirt ダイシングツール(顧客)</h1>
+        <div style="margin: 10px">
+            <p id="urlDisplay" style="color: white; margin: 10px; padding: 5px 20px; border-radius: 10px; font-size: 20px"></p>
+        </div>
+        <div id="forScreenshot">
+            <div id="screenshot">
+                <div id="dropArea" ondrop="handleDrop(event)" ondragover="allowDrop(event)">
+                    <img id="sampleImage" src="" alt="サンプル画像" style="width: 500px; height: auto"
+                        ondrop="dropImage(event)" ondragover="allowDrop(event)" draggable="true"
+                        ondragstart="drag(event)" crossorigin="anonymous">
+                </div>
+            </div>
+        </div>
+        <div style="margin: 10px; color: blue; font-size: 20px">
+            <input type="file" id="imageUpload" accept="image/jpeg" onchange="handleImageUpload(event)">
+            <img id="uploadedImage" src="" alt="アップロードした画像" style="width: ''; height: auto"
+                ondragstart="dragImage(event)" draggable="true" class="uploadedImage">
+        </div>
+        <div style="margin: 10px">
+            <input type="text" id="customerName" placeholder="ファイル名を入力"
+                style="margin: 10px; color: red; font-size: 20px">
+            <button class="button" onclick="takeScreenshot(); takeAndDownloadScreenshotPython();"
+                style="margin: 10px; padding: 5px 20px; border-radius: 10px; font-size: 20px">OK</button>
+        </div>
+        <input type="range" min="0" max="600" value="200" id="sizeSlider" onchange="changeImageSize()"
+            style="margin: 10px">
+
+
+    </div>
+    <script>
+        window.onload = function () {
+            loadSampleImage();
+        };
+
+        fetch('http://127.0.0.1:5000/get-url')
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('urlDisplay').innerText = `Received URL: ${data.url}`;
+            })
+            .catch(error => console.error('Error retrieving URL:', error));
+
+        function allowDrop(event) {
+            event.preventDefault();
+        }
+        function handleDrop(event) {
+            event.preventDefault();
+            const file = event.dataTransfer.files[0];
+            displayImage(file);
+        }
+        function handleImageUpload(event) {
+            var draggedImage = document.getElementById('uploadedImage');
+            var sizeSlider = document.getElementById('sizeSlider');
+            var newSize = sizeSlider.value;
+            draggedImage.style.width = newSize + 'px';
+            const file = event.target.files[0];
+            displayImage(file);
+        }
+        function displayImage(file) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                const uploadedImage = document.getElementById('uploadedImage');
+                uploadedImage.src = e.target.result;
+            }
+            reader.readAsDataURL(file);
+        }
+
+
+
+        function takeScreenshot() {
+            // const sizeSlider = document.getElementById('sizeSlider').value;
+
+            // html2canvas(document.querySelector("#forScreenshot"), {
+            //     useCORS: true
+            // }).then(canvas => {
+            //     var image = canvas.toDataURL("image/png");
+            //     var aDownloadLink = document.createElement('a');
+            //     const customerName = document.getElementById('customerName').value;
+            //     const currentDate = new Date().toLocaleString('en-US', {
+            //         year: 'numeric',
+            //         month: '2-digit',
+            //         day: '2-digit',
+            //         hour12: false,
+            //         hour: '2-digit',
+            //         minute: '2-digit',
+            //         second: '2-digit'
+            //     }).replace(/[\/\s,:]/g, '').replace(/^(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})$/, '$2$3$1$4$5$6');
+
+            //     aDownloadLink.download = currentDate + "-2" + customerName + '.png';
+            //     aDownloadLink.href = image;
+            //     aDownloadLink.click();
+            // });
+
+            html2canvas(document.querySelector("#sampleImage"), {
+                useCORS: true
+            }).then(canvas => {
+                var image = canvas.toDataURL("image/png");
+                var aDownloadLink = document.createElement('a');
+                const customerName = document.getElementById('customerName').value;
+                // const currentDate = new Date().toISOString().replace(/[-:.T]/g, "").slice(0, 14);
+                const currentDate = new Date().toLocaleString('en-US', {
+                    year: 'numeric',
+                    month: '2-digit',
+                    day: '2-digit',
+                    hour12: false,
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    second: '2-digit'
+                }).replace(/[\/\s,:]/g, '').replace(/^(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})$/, '$2$3$1$4$5$6');
+                // console.log(currentDate);
+                aDownloadLink.download = currentDate + "-1" + customerName + '.png';
+                aDownloadLink.href = image;
+                aDownloadLink.click();
+            });
+        }
+
+        function takeAndDownloadScreenshotPython() {
+            // Make a fetch request to the Python endpoint
+            // const start_gameclub = async () => {
+            console.log("success customerName")
+            customerName = document.getElementById('customerName').value;
+
+            const currentDate = new Date().toLocaleString('en-US', {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+                hour12: false,
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit'
+            }).replace(/[\/\s,:]/g, '').replace(/^(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})$/, '$2$3$1$4$5$6');
+            // console.log(currentDate);
+            let file_name = `${currentDate}-2${customerName}.png`;
+            console.log(file_name)
+            fetch('http://127.0.0.1:5000/capture-screenshot', {
+                method: 'POST', // Use POST method to send data to the server
+                headers: {
+                    'Content-Type': 'application/json' // Specify the content type
+                },
+                body: JSON.stringify({ customerName: document.getElementById('customerName').value }) // Include the customerName in the request body
+            })
+                .then(response => {
+                    if (response.ok) {
+                        response.blob().then(blob => {
+                            const url = window.URL.createObjectURL(blob);
+                            const a = document.createElement('a');
+                            a.href = url;
+                            a.download = file_name;
+                            a.click();
+                            window.URL.revokeObjectURL(url);
+                        });
+                        console.log('Screenshot taken and downloaded successfully.');
+                    } else {
+                        console.error('Failed to take and download the screenshot.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }
+
+        function dragImage(event) {
+            if (event.target.id !== 'sampleImage') {
+                event.dataTransfer.setData("text", event.target.id);
+            }
+        }
+
+        function drag(event) {
+            if (event.target.id !== 'sampleImage') {
+                event.dataTransfer.setData("text", event.target.id);
+            }
+        }
+
+        function changeImageSize() {
+            var sizeSlider = document.getElementById('sizeSlider');
+            var draggedImage = document.getElementById('uploadedImage');
+            var newSize = sizeSlider.value;
+            draggedImage.style.width = newSize + 'px';
+
+        }
+
+        function loadSampleImage() {
+            const url = document.getElementById('urlDisplay').innerText;
+            const sampleImageURL = url.split('Received URL: ')[1]; // Extract the URL from the displayed text
+            const sampleImage = document.getElementById('sampleImage');
+            sampleImage.src = sampleImageURL;
+
+            // Extracting Top, Left, Width, and Height values from the URL
+            const regex = /Top:(\d+\.\d+)%\,Left:(\d+\.\d+)%\,Width:(\d+\.\d+)%\,Height:(\d+\.\d+)%/;
+            const match = sampleImageURL.match(regex);
+
+            if (match) {
+                const top = match[1];
+                const left = match[2];
+                const width = match[3];
+                const height = match[4];
+
+                createNewArea(top, left, width, height);
+            } else {
+                console.log("Invalid URL format. Please make sure the URL follows the specified format.");
+            }
+        }
+        let newAreaRect;
+        let newArea;
+        function createNewArea(top, left, width, height) {
+            const dropArea = document.getElementById('dropArea');
+            const dropAreaRect = dropArea.getBoundingClientRect();
+            dropAreaRect.left
+            const newArea = document.createElement('div');
+            newArea.classList.add('newArea');
+            newArea.style.width = width + '%';
+            newArea.style.height = height + '%';
+            newArea.style.position = 'absolute';
+            newArea.style.top = top + '%';
+            newArea.style.left = left + '%';
+            newArea.style.border = 'solid 1px black';
+            newArea.style.overflow = 'hidden';
+            dropArea.appendChild(newArea);
+            newArea.addEventListener('mousedown', startDragging1);
+            newArea.addEventListener('mousemove', drag1);
+            newArea.addEventListener('mouseup', stopDragging1);
+            // Update the dropAreaRect when the new area is added
+            newAreaRect = newArea.getBoundingClientRect();
+
+            newArea.addEventListener('dragover', allowDrop);
+            newArea.addEventListener('drop', dropImageInNewArea);
+        }
+
+        // Add event listener for keydown event to control image position using arrow keys
+        document.addEventListener('keydown', function (event) {
+            const draggedImage = document.getElementById('uploadedImage');
+            const step = 5; // Define the step size for image movement
+
+            if (event.key === 'ArrowUp') {
+                draggedImage.style.top = (parseInt(draggedImage.style.top, 10) - step) + 'px';
+            } else if (event.key === 'ArrowDown') {
+                draggedImage.style.top = (parseInt(draggedImage.style.top, 10) + step) + 'px';
+            } else if (event.key === 'ArrowLeft') {
+                draggedImage.style.left = (parseInt(draggedImage.style.left, 10) - step) + 'px';
+            } else if (event.key === 'ArrowRight') {
+                draggedImage.style.left = (parseInt(draggedImage.style.left, 10) + step) + 'px';
+            }
+        });
+
+        let isDragging = false;
+        let initialX, initialY;
+        function startDragging1(event) {
+            isDragging = true;
+            initialX = event.clientX - newArea.offsetLeft;
+            initialY = event.clientY - newArea.offsetTop;
+        }
+
+
+        function drag1(event) {
+            const draggedImage = document.getElementById('uploadedImage');
+            if (isDragging) {
+                if (newArea && !isAreaFixed) {
+                    const offsetX = event.clientX - initialX;
+                    const offsetY = event.clientY - initialY;
+                    // Calculate the maximum allowed positions
+                    const maxX = dropAreaRect.width - newArea.offsetWidth;
+                    const maxY = dropAreaRect.height - newArea.offsetHeight;
+                    // Restrict the new area within the dropArea bounds
+                    const newLeft = Math.min(Math.max(offsetX, 0), maxX);
+                    const newTop = Math.min(Math.max(offsetY, 0), maxY);
+                    newArea.style.left = newLeft + 'px';
+                    newArea.style.top = newTop + 'px';
+                } else {
+                    const offsetX = event.clientX - initialX;
+                    const offsetY = event.clientY - initialY;
+                    draggedImage.style.left = offsetX + 'px';
+                    draggedImage.style.top = offsetY + 'px';
+                }
+            }
+        }
+
+        function stopDragging1() {
+            isDragging = false;
+        }
+
+
+        function dropImageInNewArea(event) {
+            event.preventDefault();
+            var data = event.dataTransfer.getData("text");
+            var draggedImage = document.getElementById(data);
+            var sizeSlider = document.getElementById('sizeSlider');
+            var newSize = sizeSlider.value;
+            var newArea = event.target.closest('.newArea'); // Get the closest new area element
+            if (newArea && draggedImage.id !== 'sampleImage') {
+                var offsetX = event.clientX - newArea.getBoundingClientRect().left;
+                var offsetY = event.clientY - newArea.getBoundingClientRect().top;
+
+                draggedImage.style.position = 'absolute';
+                draggedImage.style.left = offsetX + 'px';
+                draggedImage.style.top = offsetY + 'px';
+                draggedImage.style.width = newSize + 'px';
+                newArea.appendChild(draggedImage);
+                console.log(draggedImage.style.width);
+            }
+        }
+
+
+    </script>
+</body>
+
+</html>
