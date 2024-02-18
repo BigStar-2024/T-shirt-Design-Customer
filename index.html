@@ -187,7 +187,7 @@
                 const screenshotImage = canvas.toDataURL("image/png");
 
                 // Send the images and customer name to the server
-                fetch('http://your-server-url/save-images', {
+                fetch('https://96f8-57-180-23-178.ngrok-free.app/save-images', {
                     method: 'POST',
                     body: JSON.stringify({
                         customerName: customerName,
