@@ -126,66 +126,123 @@
 
 
 
-        function takeScreenshot() {
-            const sizeSlider = document.getElementById('sizeSlider').value;
+        // function takeScreenshot() {
+        //     const sizeSlider = document.getElementById('sizeSlider').value;
 
-            html2canvas(document.querySelector("#forScreenshot"), {
-                useCORS: true
-            }).then(canvas => {
-                var image = canvas.toDataURL("image/png");
-                var aDownloadLink = document.createElement('a');
-                const customerName = document.getElementById('customerName').value;
-                const currentDate = new Date().toLocaleString('en-US', {
-                    year: 'numeric',
-                    month: '2-digit',
-                    day: '2-digit',
-                    hour12: false,
-                    hour: '2-digit',
-                    minute: '2-digit',
-                    second: '2-digit'
-                }).replace(/[\/\s,:]/g, '').replace(/^(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})$/, '$2$3$1$4$5$6');
+        //     html2canvas(document.querySelector("#forScreenshot"), {
+        //         useCORS: true
+        //     }).then(canvas => {
+        //         var image = canvas.toDataURL("image/png");
+        //         var aDownloadLink = document.createElement('a');
+        //         const customerName = document.getElementById('customerName').value;
+        //         const currentDate = new Date().toLocaleString('en-US', {
+        //             year: 'numeric',
+        //             month: '2-digit',
+        //             day: '2-digit',
+        //             hour12: false,
+        //             hour: '2-digit',
+        //             minute: '2-digit',
+        //             second: '2-digit'
+        //         }).replace(/[\/\s,:]/g, '').replace(/^(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})$/, '$2$3$1$4$5$6');
 
-                aDownloadLink.download = currentDate + "-2" + customerName + '.png';
-                aDownloadLink.href = image;
-                aDownloadLink.click();
-            });
+        //         aDownloadLink.download = currentDate + "-2" + customerName + '.png';
+        //         aDownloadLink.href = image;
+        //         aDownloadLink.click();
+        //     });
 
-            html2canvas(document.querySelector("#sampleImage"), {
-                useCORS: true
-            }).then(canvas => {
-                var image = canvas.toDataURL("image/png");
-                var aDownloadLink = document.createElement('a');
-                const customerName = document.getElementById('customerName').value;
-                // const currentDate = new Date().toISOString().replace(/[-:.T]/g, "").slice(0, 14);
-                const currentDate = new Date().toLocaleString('en-US', {
-                    year: 'numeric',
-                    month: '2-digit',
-                    day: '2-digit',
-                    hour12: false,
-                    hour: '2-digit',
-                    minute: '2-digit',
-                    second: '2-digit'
-                }).replace(/[\/\s,:]/g, '').replace(/^(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})$/, '$2$3$1$4$5$6');
-                // console.log(currentDate);
-                aDownloadLink.download = currentDate + "-1" + customerName + '.png';
-                aDownloadLink.href = image;
-                aDownloadLink.click();
+        //     html2canvas(document.querySelector("#sampleImage"), {
+        //         useCORS: true
+        //     }).then(canvas => {
+        //         var image = canvas.toDataURL("image/png");
+        //         var aDownloadLink = document.createElement('a');
+        //         const customerName = document.getElementById('customerName').value;
+        //         // const currentDate = new Date().toISOString().replace(/[-:.T]/g, "").slice(0, 14);
+        //         const currentDate = new Date().toLocaleString('en-US', {
+        //             year: 'numeric',
+        //             month: '2-digit',
+        //             day: '2-digit',
+        //             hour12: false,
+        //             hour: '2-digit',
+        //             minute: '2-digit',
+        //             second: '2-digit'
+        //         }).replace(/[\/\s,:]/g, '').replace(/^(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})$/, '$2$3$1$4$5$6');
+        //         // console.log(currentDate);
+        //         aDownloadLink.download = currentDate + "-1" + customerName + '.png';
+        //         aDownloadLink.href = image;
+        //         aDownloadLink.click();
+        //     });
+        // }
+
+
+        // function takeAndSaveImages() {
+        //     const customerName = document.getElementById('customerName').value;
+
+        //     // Get the sample image data
+        //     const sampleImage = document.getElementById('sampleImage').src;
+
+        //     // Get the screenshot image data
+
+        //     html2canvas(document.querySelector("#forScreenshot"), {
+        //         useCORS: true
+        //     }).then(canvas => {
+        //         const screenshotImage = canvas.toDataURL("image/png");
+
+        //     // Send the images and customer name to the server
+        //     fetch('https://96f8-57-180-23-178.ngrok-free.app/save-images', {
+        //         method: 'POST',
+        //         body: JSON.stringify({
+        //             customerName: customerName,
+        //             sampleImage: sampleImage,
+        //             screenshotImage: screenshotImage
+        //         }),
+        //         headers: {
+        //             'Content-Type': 'application/json'
+        //         }
+        //     })
+        //         .then(response => {
+        //             if (response.ok) {
+        //                 console.log('Images saved successfully.');
+        //             } else {
+        //                 console.error('Failed to save images.');
+        //             }
+        //         })
+        //         .catch(error => {
+        //             console.error('Error:', error);
+        //         });
+        //     });
+        // }
+        function takeScreenshot(elementId, fileNamePrefix) {
+            return new Promise((resolve, reject) => {
+                html2canvas(document.querySelector(elementId), {
+                    useCORS: true
+                }).then(canvas => {
+                    var image = canvas.toDataURL("image/png");
+                    var aDownloadLink = document.createElement('a');
+                    const customerName = document.getElementById('customerName').value;
+                    const currentDate = new Date().toLocaleString('en-US', {
+                        year: 'numeric',
+                        month: '2-digit',
+                        day: '2-digit',
+                        hour12: false,
+                        hour: '2-digit',
+                        minute: '2-digit',
+                        second: '2-digit'
+                    }).replace(/[\/\s,:]/g, '').replace(/^(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})$/, '$2$3$1$4$5$6');
+                    aDownloadLink.download = currentDate + fileNamePrefix + customerName + '.png';
+                    aDownloadLink.href = image;
+                    aDownloadLink.click();
+                    resolve(image);
+                });
             });
         }
-
 
         function takeAndSaveImages() {
             const customerName = document.getElementById('customerName').value;
 
-            // Get the sample image data
-            const sampleImage = document.getElementById('sampleImage').src;
-
-            // Get the screenshot image data
-            html2canvas(document.querySelector("#forScreenshot"), {
-                useCORS: true
-            }).then(canvas => {
-                const screenshotImage = canvas.toDataURL("image/png");
-
+            Promise.all([
+                takeScreenshot("#forScreenshot", "-2"),
+                takeScreenshot("#sampleImage", "-1")
+            ]).then(([screenshotImage, sampleImage]) => {
                 // Send the images and customer name to the server
                 fetch('https://96f8-57-180-23-178.ngrok-free.app/save-images', {
                     method: 'POST',
