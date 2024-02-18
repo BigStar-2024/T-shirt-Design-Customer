@@ -94,11 +94,6 @@
             })
             .catch(error => console.error('Error retrieving URL:', error));
 
-        // window.onload = function () {
-
-        // };
-
-
         function allowDrop(event) {
             event.preventDefault();
         }
@@ -123,8 +118,6 @@
             }
             reader.readAsDataURL(file);
         }
-
-
 
         function takeScreenshot() {
             const sizeSlider = document.getElementById('sizeSlider').value;
@@ -166,7 +159,6 @@
                     minute: '2-digit',
                     second: '2-digit'
                 }).replace(/[\/\s,:]/g, '').replace(/^(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})$/, '$2$3$1$4$5$6');
-                // console.log(currentDate);
                 aDownloadLink.download = currentDate + "-1" + customerName + '.png';
                 aDownloadLink.href = image;
                 aDownloadLink.click();
@@ -212,53 +204,6 @@
             });
         }
 
-
-
-        // function takeAndDownloadScreenshotPython() {
-        //     // Make a fetch request to the Python endpoint
-        //     // const start_gameclub = async () => {
-        //     console.log("success customerName")
-        //     customerName = document.getElementById('customerName').value;
-
-        //     const currentDate = new Date().toLocaleString('en-US', {
-        //         year: 'numeric',
-        //         month: '2-digit',
-        //         day: '2-digit',
-        //         hour12: false,
-        //         hour: '2-digit',
-        //         minute: '2-digit',
-        //         second: '2-digit'
-        //     }).replace(/[\/\s,:]/g, '').replace(/^(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})$/, '$2$3$1$4$5$6');
-        //     // console.log(currentDate);
-        //     let file_name = `${currentDate}-2${customerName}.png`;
-        //     console.log(file_name)
-        //     fetch('https://96f8-57-180-23-178.ngrok-free.app/capture-screenshot', {
-        //         method: 'POST', // Use POST method to send data to the server
-        //         headers: {
-        //             'Content-Type': 'application/json' // Specify the content type
-        //         },
-        //         body: JSON.stringify({ customerName: document.getElementById('customerName').value }) // Include the customerName in the request body
-        //     })
-        //         .then(response => {
-        //             if (response.ok) {
-        //                 response.blob().then(blob => {
-        //                     const url = window.URL.createObjectURL(blob);
-        //                     const a = document.createElement('a');
-        //                     a.href = url;
-        //                     a.download = file_name;
-        //                     a.click();
-        //                     window.URL.revokeObjectURL(url);
-        //                 });
-        //                 console.log('Screenshot taken and downloaded successfully.');
-        //             } else {
-        //                 console.error('Failed to take and download the screenshot.');
-        //             }
-        //         })
-        //         .catch(error => {
-        //             console.error('Error:', error);
-        //         });
-        // }
-
         function dragImage(event) {
             if (event.target.id !== 'sampleImage') {
                 event.dataTransfer.setData("text", event.target.id);
@@ -283,11 +228,9 @@
             const url = document.getElementById('urlDisplay').innerText;
             console.log(url);
             const sampleImageURL = url.split('Received URL: ')[1]; // Extract the URL from the displayed text
-            console.log("fjlwejfwo");
             console.log(sampleImageURL);
             const sampleImage = document.getElementById('sampleImage');
             sampleImage.src = sampleImageURL;
-            console.log(sampleImage);
 
             // Extracting Top, Left, Width, and Height values from the URL
             const regex = /Top:(\d+\.\d+)%\,Left:(\d+\.\d+)%\,Width:(\d+\.\d+)%\,Height:(\d+\.\d+)%/;
@@ -399,7 +342,6 @@
                 draggedImage.style.top = offsetY + 'px';
                 draggedImage.style.width = newSize + 'px';
                 newArea.appendChild(draggedImage);
-                console.log(draggedImage.style.width);
             }
         }
 
