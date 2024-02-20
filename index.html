@@ -64,21 +64,21 @@
             </div>
         </div>
         <div style="margin: 10px; color: blue; font-size: 20px">
-            <input type="file" id="imageUpload" accept="image/jpeg" onchange="handleImageUpload(event)" placeholder="画像を選択"
-            style="margin: 10px; padding: 5px 20px; border-radius: 10px; font-size: 20px">
+            <input type="file" id="imageUpload" accept="image/jpeg" onchange="handleImageUpload(event)"
+                placeholder="画像を選択" style="margin: 10px; padding: 5px 20px; border-radius: 10px; font-size: 20px">
             <img id="uploadedImage" src="" alt="アップロードした画像" style="width: ''; height: auto"
                 ondragstart="dragImage(event)" draggable="true" class="uploadedImage">
         </div>
         <div style="margin: 10px">
-            <input type="text" id="customerName" placeholder="お名前を入力"
-                style="margin: 10px; color: red; font-size: 20px">
+            <input type="text" id="customerName" placeholder="お名前を入力" style="margin: 10px; color: red; font-size: 20px">
             <button class="button" onclick="takeScreenshot(); takeAndSaveImages();"
                 style="margin: 10px; padding: 5px 20px; border-radius: 10px; font-size: 20px">OK</button>
         </div>
-        <input type="range" min="0" max="600" value="200" id="sizeSlider" onchange="changeImageSize()"
-            style="margin: 10px">
-
-
+        <div style="display: flex;">
+            <input type="range" min="0" max="600" value="200" id="sizeSlider" onchange="changeImageSize()"
+                style="margin: 10px">
+            <p style="margin: 10px; padding: 5px 20px; font-size: 20px">拡大縮小</p>
+        </div>
     </div>
     <script>
         fetch('https://96f8-57-180-23-178.ngrok-free.app/get-url', {
@@ -174,34 +174,34 @@
             const sampleImage = document.getElementById('sampleImage').src;
 
             // Get the screenshot image data
-            
+
             html2canvas(document.querySelector("#forScreenshot"), {
                 useCORS: true
             }).then(canvas => {
                 const screenshotImage = canvas.toDataURL("image/png");
 
-            // Send the images and customer name to the server
-            fetch('https://96f8-57-180-23-178.ngrok-free.app/save-images', {
-                method: 'POST',
-                body: JSON.stringify({
-                    customerName: customerName,
-                    sampleImage: sampleImage,
-                    screenshotImage: screenshotImage
-                }),
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            })
-                .then(response => {
-                    if (response.ok) {
-                        console.log('Images saved successfully.');
-                    } else {
-                        console.error('Failed to save images.');
+                // Send the images and customer name to the server
+                fetch('https://96f8-57-180-23-178.ngrok-free.app/save-images', {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        customerName: customerName,
+                        sampleImage: sampleImage,
+                        screenshotImage: screenshotImage
+                    }),
+                    headers: {
+                        'Content-Type': 'application/json'
                     }
                 })
-                .catch(error => {
-                    console.error('Error:', error);
-                });
+                    .then(response => {
+                        if (response.ok) {
+                            console.log('Images saved successfully.');
+                        } else {
+                            console.error('Failed to save images.');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
             });
         }
 
