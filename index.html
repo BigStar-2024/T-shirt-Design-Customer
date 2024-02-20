@@ -3,6 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
+    <script type="text/javascript" src="js/bootstrap-filestyle.min.js"> </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>T-Shirt Image Upload</title>
@@ -63,9 +64,12 @@
                 </div>
             </div>
         </div>
-        <div style="margin: 10px; color: blue; font-size: 20px">
-            <input type="file" id="imageUpload" accept="image/jpeg" onchange="handleImageUpload(event)"
-                placeholder="画像を選択" style="margin: 10px; padding: 5px 20px; border-radius: 10px; font-size: 20px">
+        <div style="margin: 20px;">
+            <!-- <input type="file" id="imageUpload" accept="image/jpeg" onchange="handleImageUpload(event)"
+                placeholder="画像を選択" style="margin: 10px; padding: 5px 20px; border-radius: 10px; font-size: 20px"> -->
+            <label class="btn button btn-primary" style="margin: 10px 40px 10px 0px; padding: 5px 20px; border:solid 1px black; border-radius: 10px; font-size: 20px">
+                <i class="fa fa-image" ></i>画像を選択<input type="file" style="display: none;" name="image" onchange="handleImageUpload(event)">
+            </label>
             <img id="uploadedImage" src="" alt="アップロードした画像" style="width: ''; height: auto"
                 ondragstart="dragImage(event)" draggable="true" class="uploadedImage">
         </div>
@@ -79,6 +83,8 @@
                 style="margin: 10px">
             <p style="margin: 10px; padding: 5px 20px; font-size: 20px">拡大/縮小する</p>
         </div>
+
+
     </div>
     <script>
         fetch('https://96f8-57-180-23-178.ngrok-free.app/get-url', {
